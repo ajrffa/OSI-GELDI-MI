@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "18.x"
+  },
   "buildCommand": "npm run build",
-  "outputDirectory": "dist" 
+  "outputDirectory": "dist"
 }
