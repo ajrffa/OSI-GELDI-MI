@@ -84,7 +84,7 @@ const App: React.FC = () => {
    <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#ff8904_50%,#C0392B_50%,#C0392B)]">
 
       {/* DÖNEN ARKA PLAN */}
-      <Background />
+      
 
       {/* Mask */}
       <div className="absolute top-0 right-1/4 transform -translate-x-1/2 origin-top animate-swing z-30">
