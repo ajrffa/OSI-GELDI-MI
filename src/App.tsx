@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import FloatingHeads from './FloatingHeads';
-import Background from './components/Background';
+//import Background from './components/Background';
 
 // Hedef tarih: transfer sezonu bitişi
 const targetDate = new Date('2025-09-01T00:00:00');
