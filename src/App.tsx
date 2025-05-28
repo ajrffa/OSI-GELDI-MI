@@ -72,8 +72,8 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#ff8904_50%,#C0392B_50%,#C0392B)] overflow-hidden relative">
 
-      {/* DÖNEN ARKA PLAN */}
-      
+    
+
       {/* Mask */}
 <div className="absolute top-0 z-30 w-24 h-auto animate-swing origin-top transform left-4 sm:right-1/4 sm:left-auto">
   <div className="w-[2px] h-24 bg-black mx-auto"></div>
@@ -110,7 +110,7 @@ const App: React.FC = () => {
           <button
   ref={buttonRef}
   onClick={handleClick}
-  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-1 py-6 sm:py-8 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-5xl"
+  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-12 py-3 sm:py-10 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-2xl"
 >
   OSIMHEN GELDİ Mİ?
 </button>
@@ -118,7 +118,7 @@ const App: React.FC = () => {
           {message && (
             <div
               key={clickCount}
-              className="mt-4 w-full max-w-md p-4 sm:p- bg-black bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl text-white animate-fade-in transition-all duration-500"
+              className="mt-4 w-full max-w-md p-4 sm:p-6 bg-black bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl text-white animate-fade-in transition-all duration-500"
             >
               <p className="text-lg sm:text-xl font-semibold">{message}</p>
             </div>
