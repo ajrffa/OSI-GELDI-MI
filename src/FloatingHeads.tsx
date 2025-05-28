@@ -1,21 +1,34 @@
 import React, { useRef, useEffect } from 'react';
 
-const NUM_HEADS = 26;
+type Head = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  rotation: number;
+  rotationSpeed: number;
+  isPopped: boolean;
+  popTime: number;
+};
+
+const NUM_HEADS = 10;
 const IMAGE_SRC = '/osimhen.png';
-const SIZE = 70;
+const SIZE = 63;
 const MAX_SPEED = 2;
 const MIN_SPEED = 0.3;
 
 const FloatingHeads: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const heads = useRef<any[]>([]);
+  const heads = useRef<Head[]>([]);
   const imgRef = useRef<HTMLImageElement>(new Image());
   const scatterTrigger = useRef(false);
+  const animationFrameId = useRef<number>();
 
+  // Engel alanlarını al, button ve iframe çarpışma alanları
   const getObstacleAreas = () => {
     const button = document.querySelector('button');
     const iframe = document.querySelector('iframe');
-    const obstacles: any[] = [];
+    const obstacles: { x: number; y: number; width: number; height: number }[] = [];
     if (button) {
       const rect = button.getBoundingClientRect();
       obstacles.push({ x: rect.left - 40, y: rect.top - 40, width: rect.width + 80, height: rect.height + 80 });
@@ -27,7 +40,8 @@ const FloatingHeads: React.FC = () => {
     return obstacles;
   };
 
-  const pushOutFromObstacle = (head: any, area: any) => {
+  // Engel alanından kafayı dışarı it
+  const pushOutFromObstacle = (head: Head, area: { x: number; y: number; width: number; height: number }) => {
     const overlapX = Math.min(head.x + SIZE, area.x + area.width) - Math.max(head.x, area.x);
     const overlapY = Math.min(head.y + SIZE, area.y + area.height) - Math.max(head.y, area.y);
 
@@ -44,7 +58,8 @@ const FloatingHeads: React.FC = () => {
     }
   };
 
-  const applyRepulsion = (headA: any, headB: any) => {
+  // Kafaların birbirini itme fonksiyonu
+  const applyRepulsion = (headA: Head, headB: Head) => {
     const dx = headB.x - headA.x;
     const dy = headB.y - headA.y;
     const distSq = dx * dx + dy * dy;
@@ -64,7 +79,8 @@ const FloatingHeads: React.FC = () => {
     }
   };
 
-  const clampSpeed = (head: any) => {
+  // Hız sınırla ve düşük hızda rastgele hareket ver
+  const clampSpeed = (head: Head) => {
     const speed = Math.sqrt(head.vx * head.vx + head.vy * head.vy);
     if (speed > MAX_SPEED) {
       head.vx = (head.vx / speed) * MAX_SPEED;
@@ -81,6 +97,7 @@ const FloatingHeads: React.FC = () => {
     const img = imgRef.current;
     img.src = IMAGE_SRC;
 
+    // Canvas boyutlarını ayarla
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -88,10 +105,12 @@ const FloatingHeads: React.FC = () => {
 
     resizeCanvas();
 
+    // Rastgele hız üret
     function randomVelocity() {
       return (Math.random() - 0.5) * 1.2;
     }
 
+    // Kafaları başlat
     function initHeads() {
       heads.current = Array.from({ length: NUM_HEADS }).map(() => ({
         x: Math.random() * (canvas.width - SIZE),
@@ -105,19 +124,30 @@ const FloatingHeads: React.FC = () => {
       }));
     }
 
-    canvas.addEventListener('click', (e) => {
+    // Tıklama ve dokunma ile kafa patlatma
+    const handleInteraction = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
 
       for (const head of heads.current) {
-        if (!head.isPopped && mouseX > head.x && mouseX < head.x + SIZE && mouseY > head.y && mouseY < head.y + SIZE) {
+        if (!head.isPopped && x > head.x && x < head.x + SIZE && y > head.y && y < head.y + SIZE) {
           head.isPopped = true;
           head.popTime = Date.now();
         }
       }
-    });
+    };
 
+    const onClick = (e: MouseEvent) => handleInteraction(e.clientX, e.clientY);
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      handleInteraction(touch.clientX, touch.clientY);
+    };
+
+    canvas.addEventListener('click', onClick);
+    canvas.addEventListener('touchstart', onTouchStart);
+
+    // Güncelleme fonksiyonu
     function update() {
       const obstacleAreas = getObstacleAreas();
 
@@ -128,6 +158,7 @@ const FloatingHeads: React.FC = () => {
         head.y += head.vy;
         head.rotation += head.rotationSpeed;
 
+        // Kenar çarpışmaları
         if (head.x <= 0) {
           head.x = 0;
           head.vx = Math.abs(head.vx) * 0.7;
@@ -145,6 +176,7 @@ const FloatingHeads: React.FC = () => {
           head.vy = -Math.abs(head.vy) * 0.7;
         }
 
+        // Engel alanlarından dışarı it
         for (const area of obstacleAreas) {
           pushOutFromObstacle(head, area);
         }
@@ -152,12 +184,14 @@ const FloatingHeads: React.FC = () => {
         clampSpeed(head);
       }
 
+      // Kafaların birbirini itmesi
       for (let i = 0; i < heads.current.length; i++) {
         for (let j = i + 1; j < heads.current.length; j++) {
           applyRepulsion(heads.current[i], heads.current[j]);
         }
       }
 
+      // Scatter trigger
       if (scatterTrigger.current) {
         for (let head of heads.current) {
           head.vx = (Math.random() - 0.5) * 6;
@@ -167,6 +201,7 @@ const FloatingHeads: React.FC = () => {
       }
     }
 
+    // Çizim fonksiyonu
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let head of heads.current) {
@@ -175,52 +210,66 @@ const FloatingHeads: React.FC = () => {
           if (scale <= 0) continue;
           ctx.save();
           ctx.translate(head.x + SIZE / 2, head.y + SIZE / 2);
-          ctx.scale(scale, scale);
           ctx.rotate(head.rotation);
+          ctx.globalAlpha = scale;
           ctx.drawImage(img, -SIZE / 2, -SIZE / 2, SIZE, SIZE);
           ctx.restore();
         } else {
           ctx.save();
           ctx.translate(head.x + SIZE / 2, head.y + SIZE / 2);
           ctx.rotate(head.rotation);
+          ctx.globalAlpha = 1;
           ctx.drawImage(img, -SIZE / 2, -SIZE / 2, SIZE, SIZE);
           ctx.restore();
         }
       }
     }
 
+    // Animasyon döngüsü
     function animate() {
       update();
       draw();
-      requestAnimationFrame(animate);
+      animationFrameId.current = requestAnimationFrame(animate);
     }
 
-    img.onload = () => {
-      initHeads();
-      animate();
-    };
+    initHeads();
+    animate();
 
-    window.addEventListener('resize', () => {
+    // Pencere yeniden boyutlandığında canvas'ı ve kafaları yeniden ayarla
+    const onResize = () => {
       resizeCanvas();
       initHeads();
-    });
-
-    const scatterHandler = () => {
-      scatterTrigger.current = true;
     };
-    window.addEventListener('osimhen-scatter', scatterHandler);
+    window.addEventListener('resize', onResize);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('osimhen-scatter', scatterHandler);
+      window.removeEventListener('resize', onResize);
+      canvas.removeEventListener('click', onClick);
+      canvas.removeEventListener('touchstart', onTouchStart);
+      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     };
   }, []);
 
+  // Scatter dışarıdan tetikleme (opsiyonel)
+  const scatterHeads = () => {
+    scatterTrigger.current = true;
+  };
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100dvh', // Mobilde de tam yükseklik için
+          pointerEvents: 'auto', // Canvas üzerindeki tıklama ve dokunmayı açık tut
+          zIndex: 10,
+        }}
+      />
+    </>
   );
 };
 
