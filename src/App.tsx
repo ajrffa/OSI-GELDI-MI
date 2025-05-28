@@ -92,7 +92,7 @@ const App: React.FC = () => {
       {/* YouTube player - sadece masaüstünde göster */}
       <div
         ref={iframeRef}
-        className="fixed top-0 left-0 bottom-0 p-4 z-10 w-full max-w-[95vw] sm:max-w-[600px] hidden sm:block"
+        className="fixed top-0 left-0 bottom-0 p-4 z-10 w-full max-w-[95vw] sm:max-w-[581px] hidden sm:block"
       >
         <div className="aspect-video border-4 border-[#82181a] rounded-2xl overflow-hidden shadow-lg bg-black">
           <iframe
