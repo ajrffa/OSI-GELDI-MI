@@ -20,7 +20,7 @@ type Head = {
   hearts: Heart[];
 };
 
-const NUM_HEADS = 13;
+const NUM_HEADS = 9;
 const IMAGE_SRC = '/osimhen.png';
 const HEART_SRC = '/heart.png';
 const SIZE = 63;
