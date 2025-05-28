@@ -88,6 +88,7 @@ const App: React.FC = () => {
       {/* Uçuşan kafalar */}
       <FloatingHeads buttonRef={buttonRef} iframeRef={iframeRef} />
 
+     
       {/* YouTube player - sadece masaüstünde göster */}
       <div
         ref={iframeRef}
