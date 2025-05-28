@@ -137,7 +137,7 @@ const App: React.FC = () => {
           className="hover:scale-110 transition-transform duration-300"
           aria-label="Twitter X Link"
         >
-          <img src="/x-icon.png" alt="X Logo" className="h-10 w-10 sm:h-8 sm:w-8" />
+          <img src="/x-icon.png" alt="X Logo" className="h-9 w-9 sm:h-8 sm:w-8" />
         </a>
         <a
           href="https://www.galatasaray.org/"
