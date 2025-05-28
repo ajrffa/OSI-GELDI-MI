@@ -110,7 +110,7 @@ const App: React.FC = () => {
           <button
   ref={buttonRef}
   onClick={handleClick}
-  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-11 py-6 sm:py-8 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-5xl sm:max-w-xs"
+  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-1 py-6 sm:py-8 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-5xl"
 >
   OSIMHEN GELDİ Mİ?
 </button>
