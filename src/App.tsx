@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import FloatingHeads from './FloatingHeads';
-import Background from './components/Background';
 
 const targetDate = new Date('2025-09-01T00:00:00');
 
@@ -74,8 +73,7 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[linear-gradient(90deg,#ff8904_50%,#C0392B_50%,#C0392B)] overflow-hidden relative">
 
       {/* DÖNEN ARKA PLAN */}
-      <Background />
-
+      
       {/* Mask */}
 <div className="absolute top-0 z-30 w-24 h-auto animate-swing origin-top transform left-4 sm:right-1/4 sm:left-auto">
   <div className="w-[2px] h-24 bg-black mx-auto"></div>
