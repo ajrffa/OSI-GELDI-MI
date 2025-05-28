@@ -112,7 +112,7 @@ const App: React.FC = () => {
           <button
   ref={buttonRef}
   onClick={handleClick}
-  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-12 py-3 sm:py-6 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-2xl sm:max-w-xs"
+  className="bg-gradient-to-r from-orange-500 to-yellow-500 text-red-700 px-8 sm:px-11 py-6 sm:py-8 text-4xl sm:text-5xl font-extrabold rounded-2xl shadow-2xl border-4 border-red-700 hover:scale-110 transition-transform duration-300 sm:w-auto sm:max-w-5xl sm:max-w-xs"
 >
   OSIMHEN GELDİ Mİ?
 </button>
@@ -120,7 +120,7 @@ const App: React.FC = () => {
           {message && (
             <div
               key={clickCount}
-              className="mt-4 w-full max-w-md p-4 sm:p-6 bg-black bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl text-white animate-fade-in transition-all duration-500"
+              className="mt-4 w-full max-w-md p-4 sm:p- bg-black bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl text-white animate-fade-in transition-all duration-500"
             >
               <p className="text-lg sm:text-xl font-semibold">{message}</p>
             </div>
